@@ -9,6 +9,7 @@ export const clearInput = () => {
 
 export const clearResult = () => {
     elements.searchResList.innerHTML = '';
+    elements.searchResPages.innerHTML = '';
 };
 
 /*  'pasta with tomato and spinach'       
@@ -54,6 +55,45 @@ const renderRecipe = recipe => {
     elements.searchResList.insertAdjacentHTML('beforeend', markup);
 };
 
-export const renderResult = recipes => {
-    recipes.forEach(renderRecipe);
+//we must pass number of page so we can print that number to interface. and also type for next and back button
+const createButton = (page, type) => `
+
+    <button class="btn-inline results__btn--${type}" data-goto=${type === 'prev' ? page -1 : page + 1}>
+        <span>Page ${type === 'prev' ? page -1 : page + 1}</span>
+        <svg class="search__icon">
+            <use href="img/icons.svg#icon-triangle-${type === 'prev' ? 'left' : 'right'}"></use>
+        </svg>
+    </button>
+`;
+
+const renderButtons = (page, numResults, resPerpage) => {
+    const pages = Math.ceil(numResults / resPerpage); //ex: if we have 30 pages, each page have 10 result, 30/10 = 3 
+    let button;
+
+    if(page === 1 && pages > 1){
+        //button to go to next page
+        button = createButton(page, 'next');
+    }else if (page < pages){
+        //both buttons
+        button = `
+            ${createButton(page, 'prev')}
+            ${createButton(page, 'next')}
+        `;
+    }else if(page === pages && pages > 1){
+        //button to go to prev page
+        button = createButton(page, 'prev');
+    }
+
+    elements.searchResPages.insertAdjacentHTML('afterbegin', button)
+};
+
+export const renderResults = (recipes, page = 1, resPerpage = 10) => {
+    //render results of current page
+    const start = (page - 1) * resPerpage; 
+    const end = page * resPerpage;
+
+    recipes.slice(start, end).forEach(renderRecipe);
+
+    //render pagination button
+    renderButtons(page, recipes.length, resPerpage); //page is current page (1)/ recipes is array all of recipe / resPerPage show 10
 };

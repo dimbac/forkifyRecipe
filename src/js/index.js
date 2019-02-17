@@ -28,7 +28,7 @@ const controlSearch = async () =>{
 
         //5) Render results on UI
         clearLoader();
-        searchView.renderResult(state.search.result); //render UI, then call renderResult() [searchView.js] to get the state.search.result from getResult() [Search.js]
+        searchView.renderResults(state.search.result); //render UI, then call renderResult() [searchView.js] to get the state.search.result from getResult() [Search.js]
 
     }
 }
@@ -38,3 +38,11 @@ elements.searchForm.addEventListener('submit', e => {
     controlSearch();
 });
 
+elements.searchResPages.addEventListener('click', e => {
+    const btn = e.target.closest('.btn-inline');
+    if(btn){
+        const goToPage = parseInt(btn.dataset.goto, 10); //btn .btn-inline then searching 'goto' number
+        searchView.clearResult();
+        searchView.renderResults(state.search.result, goToPage);
+    }
+});

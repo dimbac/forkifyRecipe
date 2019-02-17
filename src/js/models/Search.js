@@ -7,10 +7,10 @@ export default class Search{
     }
 
     async getResult(query){
-        const proxy = 'https://cors-anywhere.herokuapp.com/';
+        const proxy = 'https://cors-anywhere.herokuapp.com/'; //${proxy}
 
         try{
-            const res = await axios(`${proxy}https://www.food2fork.com/api/search?key=${env.key}&q=${this.query}`); //because thisquery will be object once we call the getResult, ex: ('pizza') from index.js
+            const res = await axios(`https://www.food2fork.com/api/search?key=${env.key}&q=${this.query}`); //because thisquery will be object once we call the getResult, ex: ('pizza') from index.js
             this.result = res.data.recipes; // res = pizza , the res will search 'pizza' in data.recipes 
             //console.log(this.result);
         }catch(error){
