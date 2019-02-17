@@ -11,6 +11,31 @@ export const clearResult = () => {
     elements.searchResList.innerHTML = '';
 };
 
+/*  'pasta with tomato and spinach'       
+    cur.length is 5 because split method, it will search until string space then split
+              0 + 5
+    acc: 0/ acc + cur.length = 5 / ['pasta']
+    acc: 5/ acc + cur.length = 9 / ['pasta', 'with]
+    acc: 9/ acc + cur.length = 15 / ['pasta', 'with, 'tomato']
+    acc: 15/ acc + cur.length = 18 / ['pasta', 'with, 'tomato'] / it more than limit, so it will not push
+    acc: 18/ acc + cur.length = 24 / ['pasta', 'with, 'tomato']
+
+*/
+const limitRecipeTitle = (title, limit = 17) => {
+    const newTitle = [];
+    if(title.length > limit){
+        title.split(' ').reduce((acc, cur) => {
+            if(acc + cur.length <= limit){
+                //if its still under or equal of the limit, then we push to new array
+                newTitle.push(cur);
+            }
+            return acc + cur.length;
+        }, 0);
+
+        return `${newTitle.join(' ')}...`; //return the result, then join with string ...)
+    }
+    return title;
+};
 
 const renderRecipe = recipe => {
     const markup = `
@@ -20,7 +45,7 @@ const renderRecipe = recipe => {
                     <img src="${recipe.image_url}" alt="${recipe.title}">
                 </figure>
                 <div class="results__data">
-                    <h4 class="results__name">${recipe.title}</h4>
+                    <h4 class="results__name">${limitRecipeTitle(recipe.title)}</h4>
                     <p class="results__author">${recipe.publisher}</p>
                 </div>
             </a>
