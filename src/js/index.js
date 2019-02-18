@@ -59,11 +59,6 @@ elements.searchResPages.addEventListener('click', e => {
 
 /** TODO:   RECIPE CONTROLLER   */
 
-/* testing purpose
-const r = new Recipe(46956);
-r.getRecipe();
-console.log(r); */
-
 const controlRecipe = async () =>{
     //Get ID from url
     const id = window.location.hash.replace('#', ''); //'#46956' to '46956'
@@ -76,8 +71,9 @@ const controlRecipe = async () =>{
         state.recipe = new Recipe(id); //create a new recipe object based on a model Recipe.js, saved it to state.recipe
 
         try{
-            // get recipe data
+            // get recipe data and parse ingrediet
             await state.recipe.getRecipe(); //call getRecipe(); from Recipe.js
+            state.recipe.parseIngredients();
 
             //calculate servings and time
             state.recipe.calcTime();
