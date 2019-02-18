@@ -18,19 +18,26 @@ const controlSearch = async () =>{
 
     if(query){
         // 2) New search object and add to state
-        state.search = new Search(query); //store it into global state object
+        state.search = new Search(query); //create a new recipe object based on a model Recipe.js, saved it to state.recipe
 
         //3) Prepare UI for results
         searchView.clearInput();
         searchView.clearResult();
         renderLoader(elements.searchRes);
         
-        // 4) Search for recipes
-        await state.search.getResult(); //after get state.search(query), then we can call getResult() method to searching that query
+        try{
+            // 4) Search for recipes
+            await state.search.getResult(); //after get state.search(query), then we can call getResult() method to searching that query
 
-        //5) Render results on UI
-        clearLoader();
-        searchView.renderResults(state.search.result); //render UI, then call renderResult() [searchView.js] to get the state.search.result from getResult() [Search.js]
+            //5) Render results on UI
+            clearLoader();
+            searchView.renderResults(state.search.result); //render UI, then call renderResult() [searchView.js] to get the state.search.result from getResult() [Search.js]
+        }catch(error){
+            console.log(error);
+            alert('Something wrong with the search....');
+            clearLoader();
+        }
+        
 
     }
 }
@@ -52,6 +59,37 @@ elements.searchResPages.addEventListener('click', e => {
 
 /** TODO:   RECIPE CONTROLLER   */
 
+/* testing purpose
 const r = new Recipe(46956);
 r.getRecipe();
-console.log(r);
+console.log(r); */
+
+const controlRecipe = async () =>{
+    //Get ID from url
+    const id = window.location.hash.replace('#', ''); //'#46956' to '46956'
+    console.log(id);
+
+    if(id){
+        //prepare UI for changes
+
+        // create new recipe object
+        state.recipe = new Recipe(id); //create a new recipe object based on a model Recipe.js, saved it to state.recipe
+
+        try{
+            // get recipe data
+            await state.recipe.getRecipe(); //call getRecipe(); from Recipe.js
+
+            //calculate servings and time
+            state.recipe.calcTime();
+            state.recipe.calcServings();
+
+            //render recipe
+            console.log(state.recipe);
+        }catch(error){
+            alert('Error processing recipe!');
+        }
+        
+    }
+};
+
+['hashchange', 'load'].forEach(event => window.addEventListener(event, controlRecipe));
