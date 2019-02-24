@@ -1,6 +1,5 @@
 import {elements} from './base';
 
-
 export const getInput = () => elements.searchInput.value; //it will return value to const getInput
 
 export const clearInput = () => {
@@ -17,8 +16,7 @@ export const highlightSelected = id => {
     resultArr.forEach(el => {
         el.classList.remove('results__link--active');
     });
-
-    document.querySelector(`.results__link[href*="#${id}"]`).classList.add('results__link--active');
+    document.querySelector(`.results__link[href*="${id}"]`).classList.add('results__link--active');
 };
 
 /*  'pasta with tomato and spinach'       

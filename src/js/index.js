@@ -70,7 +70,6 @@ elements.searchResPages.addEventListener('click', e => {
 const controlRecipe = async () =>{
     //Get ID from url
     const id = window.location.hash.replace('#', ''); //'#46956' to '46956'
-    console.log(id);
 
     if(id){
         //prepare UI for changes
@@ -78,7 +77,7 @@ const controlRecipe = async () =>{
         renderLoader(elements.recipe);
 
         // Highlight selected search item
-        searchView.highlightSelected(id);
+        if (state.search) searchView.highlightSelected(id); //if there a search after reload page, it will still select+render
 
         // create new recipe object
         state.recipe = new Recipe(id); //create a new recipe object based on a model Recipe.js, saved it to state.recipe
@@ -147,9 +146,6 @@ elements.shopping.addEventListener('click', e => {
  * LIKE CONTROLLER  
  */
 
-state.likes = new Likes(); //TESTING
-likesView.toggleLikeMenu(state.likes.getNumLikes()); //TESTING
-
 const controlLike = () =>{
     if(!state.likes) state.likes = new Likes();
 
@@ -186,6 +182,21 @@ const controlLike = () =>{
     }
     likesView.toggleLikeMenu(state.likes.getNumLikes());
 };
+
+// Restore liked recipes on page load
+window.addEventListener('load', () => {
+    state.likes = new Likes(); 
+
+    //restore likes
+    state.likes.readStorage();
+
+    //toggle like menu button
+    likesView.toggleLikeMenu(state.likes.getNumLikes());
+
+    // render the existing likes
+    // The second likes is the array. So state.likes is the new object and to call the likes array on that, we add another likes to that object. 
+    state.likes.likes.forEach(like => likesView.renderLike(like));
+});
 
 
 // handling recipe button click
