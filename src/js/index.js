@@ -15,7 +15,7 @@ import {elements, renderLoader, clearLoader} from './views/base';
     - liked recipes
 */
 const state = {};
-window.state = state;
+
 
 /**  
  * SEARCH CONTROLLER  
@@ -65,8 +65,9 @@ elements.searchResPages.addEventListener('click', e => {
 });
 
 
-/** TODO:   RECIPE CONTROLLER   */
-
+/** 
+ * RECIPE CONTROLLER   
+ * */
 const controlRecipe = async () =>{
     //Get ID from url
     const id = window.location.hash.replace('#', ''); //'#46956' to '46956'
@@ -110,7 +111,6 @@ const controlRecipe = async () =>{
 /** 
  * LIST CONTROLLER  
  */
-
 const controlList = () => {
     // Create a new list IF there in none yet
     if(!state.list) state.list = new List();
@@ -139,13 +139,12 @@ elements.shopping.addEventListener('click', e => {
         const val = parseFloat(e.target.value, 10);
         state.list.updateCount(id, val);
     }
-
 });
+
 
 /** 
  * LIKE CONTROLLER  
  */
-
 const controlLike = () =>{
     if(!state.likes) state.likes = new Likes();
 
@@ -159,7 +158,6 @@ const controlLike = () =>{
             state.recipe.title,
             state.recipe.author,
             state.recipe.img
-
         );
 
         // Toggle the like button
@@ -185,6 +183,7 @@ const controlLike = () =>{
 
 // Restore liked recipes on page load
 window.addEventListener('load', () => {
+
     state.likes = new Likes(); 
 
     //restore likes
@@ -217,7 +216,4 @@ elements.recipe.addEventListener('click', e => {
         //like controller
         controlLike();
     }
-    //console.log(state.recipe);
 });
-
-window.l = new List();
